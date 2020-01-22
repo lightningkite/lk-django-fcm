@@ -9,6 +9,7 @@ from typing import Sequence
 import firebase_admin
 
 from firebase_admin import messaging
+from firebase_admin.exceptions import FirebaseError
 
 from django.conf import settings
 from django.db import models
@@ -164,9 +165,9 @@ class FCMDeviceToken(models.Model):
                 **body
             )
             response = messaging.send(message)
-        except messaging.ApiCallError as ace:
+        except FirebaseError as fbe:
             # https://firebase.google.com/docs/cloud-messaging/send-message#admin_sdk_error_reference
-            if ace.code in [
+            if fbe.code in [
                 'messaging/invalid-recipient',
                 'messaging/invalid-registration-token',
                 'messaging/registration-token-not-registered',
