@@ -58,7 +58,7 @@ class FCMDeviceToken(models.Model):
             'Active' if self.active else 'Inactive')
 
     @staticmethod
-    def construct_body(title: str, category: str, topic: str,
+    def construct_body(title: str, topic: str, category: str = None,
                        data: dict = None, body_text: str = '',
                        alert_sound: str = 'default', critical: bool = False,
                        web_badge: str = '', web_icon: str = '',
@@ -69,6 +69,13 @@ class FCMDeviceToken(models.Model):
         if vibration_pattern is None:
             vibration_pattern = DEFAULT_VIBRATION_PATTERN
 
+        android_notification_additional_config = {}
+        aps_additional_config = {}
+
+        if category is not None:
+            android_notification_additional_config['click_action'] = category
+            aps_additional_config['category'] = category
+
         # https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html#//apple_ref/doc/uid/TP40008194-CH17-SW5
         fcm_body = {
             'data': data,
@@ -78,7 +85,7 @@ class FCMDeviceToken(models.Model):
                 notification=messaging.AndroidNotification(
                     title=title,
                     body=body_text,
-                    click_action=category,
+                    **android_notification_additional_config,
                 ),
             ),
             'webpush': messaging.WebpushConfig(
@@ -144,13 +151,10 @@ class FCMDeviceToken(models.Model):
                             alert_sound, critical=critical, volume=1),  # sound to play
                         content_available=True,  # use 1 to indicate that the system has new data to handle
 
-                        # previously context and context_id
-                        # represensts notification types (work with mobile on configuring)
-                        category=category,
                         # used for grouping along with a Notification Content app extension
-                        # thread_id='{}'.format(alert.school.pk),
                         mutable_content=True,
                         custom_data=data,
+                        **aps_additional_config,
                     ),
                     **data
                 ),
