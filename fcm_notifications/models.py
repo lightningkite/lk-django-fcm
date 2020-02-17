@@ -78,6 +78,7 @@ class FCMDeviceToken(models.Model):
                 notification=messaging.AndroidNotification(
                     title=title,
                     body=body_text,
+                    click_ation=category,
                 ),
             ),
             'webpush': messaging.WebpushConfig(
