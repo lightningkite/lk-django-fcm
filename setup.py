@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='lk-django-fcm',
-    version='0.0.2',
+    version='0.1.1',
     author='722C',
     description="LK's Django FCM Using Firebase Admin",
     license='MIT',
