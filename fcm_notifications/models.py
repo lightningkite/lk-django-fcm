@@ -63,7 +63,7 @@ class FCMDeviceToken(models.Model):
                        alert_sound: str = 'default', critical: bool = False,
                        web_badge: str = '', web_icon: str = '',
                        vibration_pattern: Sequence[int] = None,
-                       priority: str = 'normal', badge_count:int = 0):
+                       priority: str = 'normal', badge_count:int = None):
         if data is None:
             data = {}
         if vibration_pattern is None:
