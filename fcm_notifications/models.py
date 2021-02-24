@@ -63,7 +63,7 @@ class FCMDeviceToken(models.Model):
                        alert_sound: str = 'default', critical: bool = False,
                        web_badge: str = '', web_icon: str = '',
                        vibration_pattern: Sequence[int] = None,
-                       priority: str = 'normal'):
+                       priority: str = 'normal', badge_count:int = None):
         if data is None:
             data = {}
         if vibration_pattern is None:
@@ -146,7 +146,7 @@ class FCMDeviceToken(models.Model):
                             # subtitle='',
                             body=body_text,  # body text of message
                         ),
-                        # badge=0,  # badge counter
+                        badge=badge_count,  # badge counter
                         sound=messaging.CriticalSound(
                             alert_sound, critical=critical, volume=1),  # sound to play
                         content_available=True,  # use 1 to indicate that the system has new data to handle
